@@ -1,19 +1,37 @@
 {
   "name": "wf-jspdf",
   "version": "1.0.0",
-  "description": "Create common format for PDF Reports",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c"
+  "description": "A library for generating PDF documents using jsPDF",
+  "exports": {
+    "./pdfHeader": "./dist/pdfHeader.umd.js",
+    "./pdfTable": "./dist/pdfTable.umd.js"
   },
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "clean": "rimraf dist",
+    "build:pdfHeader": "rollup -c rollup.config.pdfHeader.mjs",
+    "build:pdfTable": "rollup -c rollup.config.pdfTable.mjs",
+    "build": "npm run build:pdfHeader && npm run build:pdfTable"
+  },
+  "dependencies": {
+    "jspdf": "^2.4.0",
+    "jspdf-autotable": "^3.5.15"
+  },
   "devDependencies": {
-    "@rollup/plugin-multi-entry": "^6.0.1",
-    "@rollup/plugin-node-resolve": "^15.3.0",
-    "@rollup/plugin-terser": "^0.4.4",
-    "rollup": "^4.24.4",
-    "rollup-plugin-terser": "^7.0.2"
-  }
+    "@rollup/plugin-commonjs": "^21.0.2",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "rimraf": "^5.0.10",
+    "rollup": "^2.62.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pchambless/wf-jsPDF.git"
+  },
+  "keywords": [
+    "pdf",
+    "jspdf",
+    "autotable"
+  ],
+  "author": "Paul Chambless",
+  "license": "MIT"
 }
