@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -21,11 +21,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Clean npm cache
+        run: npm cache clean --force
+
+      - name: Delete node_modules
+        run: rm -rf node_modules
+
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: List node modules
-        run: Get-ChildItem -Recurse -Force node_modules
+      - name: List Rollup shared directory
+        run: ls -R node_modules/rollup/dist/shared
 
       - name: Run build
         run: npm run build
