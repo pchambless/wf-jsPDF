@@ -10,18 +10,18 @@
     "clean": "rimraf dist",
     "build:pdfHeader": "rollup -c rollup.config.pdfHeader.mjs",
     "build:pdfTable": "rollup -c rollup.config.pdfTable.mjs",
-    "build": "npm run build:pdfHeader && npm run build:pdfTable"
+    "build": "npm run clean && npm run build:pdfHeader && npm run build:pdfTable"
   },
   "dependencies": {
     "jspdf": "^2.4.0",
     "jspdf-autotable": "^3.5.15"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^21.0.2",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.0.6",
-    "rimraf": "^5.0.10",
-    "rollup": "^4.24.4"
+    "@rollup/plugin-node-resolve": "13.0.6",
+    "@rollup/plugin-commonjs": "21.0.2",
+    "@rollup/plugin-json": "4.1.0",
+    "rollup": "2.79.2",
+    "rimraf": "3.0.2"
   },
   "repository": {
     "type": "git",
