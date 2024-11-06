@@ -23,9 +23,12 @@
     "rollup": "2.79.2",
     "rimraf": "3.0.2"
   },
+  "files": [
+    "dist/"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/pchambless/wf-jsPDF.git"
+    "url": "git+https://github.com/pchambless/wf-jsPDF.git"
   },
   "keywords": [
     "pdf",
