@@ -6,9 +6,10 @@ export default {
   input: 'libraries/pdfTable/index.js',
   output: {
     dir: 'dist',
-    format: 'esm',
+    format: 'umd',
     inlineDynamicImports: true,
-    entryFileNames: 'pdfTable.umd.js', // Specify the output filename
+    name: 'pdfTable',
+    entryFileNames: '[name].umd.js'
   },
   plugins: [
     resolve(),

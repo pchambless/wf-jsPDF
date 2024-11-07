@@ -36,11 +36,6 @@ jobs:
       - name: Run build
         run: npm run build
 
-      - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish
-
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
