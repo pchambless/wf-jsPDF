@@ -1,40 +1,55 @@
-import { jsPDF } from 'jspdf';
-import pdfHeader from '../dist/index.umd.js';
-console.log(pdfHeader);
+import { genHeader, genTable } from '../dist/index.esm.js'; // Import named exports
+import fs from 'fs'; // Import file system module
+import { hdrData } from './data/header.js'; 
+import { tblData } from './data/table.js';
+import jsPDF from 'jspdf'; 
+import autoTable from 'jspdf-autotable';
+
 
 describe('buildPDF', () => {
   it('should generate a PDF with the correct header', () => {
-    // Mock data
-    const tbl_Entity = {
-      selectedRow: {
-        name: "Sample Name",
-        description: "Sample Description"
-      }
-    };
 
-    // Define the buildPDF function
+// Define the buildPDF function
     function buildPDF() {
-      // Initialize jsPDF
-      var doc = new jsPDF({ orientation: 'portrait' });
-      doc.text("", 0, 0);
 
-      // Get the width of the document based on its orientation
-      var pageWidth = doc.internal.pageSize.getWidth();
+// pick the orientation
+    const orientation = 'portrait'
 
-      // Build Report
-      const title = `Ingredient Type: `;
-      const name = tbl_Entity.selectedRow.name;
-      const descr = tbl_Entity.selectedRow.description;
-      pdfHeader.genHeader(doc, pageWidth, title, name, descr);
+// Build Report
+// Use imported header data
+  const { acctName, title, name, description } = hdrData;
+  var doc = genHeader(orientation, acctName, title, name, description);
 
-      return doc.output("dataurlstring");
-    }
+  console.log('test AFTER genHeader:', JSON.stringify(doc, null, 2).slice(0, 500));
 
-    // Run the test
+// Build the column Styles
+const columnStyles = { 
+  0: { cellWidth: [10], halign: 'center', fontStyle: 'bold' }, 
+  1: { cellWidth: [25], halign: 'left', fontStyle: 'bold' }, 
+  2: { cellWidth: [15], halign: 'right' }, 
+  3: { cellWidth: [15], halign: 'left' }, 
+  4: { cellWidth: [15], halign: 'left' }, 
+  5: { cellWidth: [15], halign: 'right' }, 
+  6: { cellWidth: [25], halign: 'left' }, 
+  7: { cellWidth: [25], halign: 'left' }
+  };
+// Create the table
+  doc = genTable(doc, tblData, columnStyles, 91);
+// console.log('After genTable:', JSON.stringify(doc, null, 2).slice(0, 500));
+
+// return PDF
+  return doc.output('dataurlstring')
+}
+
+// Run the test
     const pdfOutput = buildPDF();
-    console.log(pdfOutput);
 
-    // Add assertions to verify the output
-    expect(pdfOutput).toContain("data:application/pdf;base64");
+// Write the PDF to a file for manual inspection
+    const pdfData = pdfOutput.split(',')[1]; // Remove the data URL prefix
+    const pdfBuffer = Buffer.from(pdfData, 'base64');
+    fs.writeFileSync('C:/Users/pc790/OneDrive/Consulting/Whatsfresh/aaTestPDF.pdf', pdfBuffer);
+
+// Add assertions to verify the output
+    expect(pdfOutput.startsWith("data:application/pdf;filename=generated.pdf;base64")).toBe(true);
   });
 });

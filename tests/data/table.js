@@ -1,6 +1,6 @@
 // tests/data/table.js
 module.exports = {
-  tblRows: [
+  tblData: [
     {
       "Code": "M",
       "Ingredient": "Mango",

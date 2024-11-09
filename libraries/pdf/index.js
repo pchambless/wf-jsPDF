@@ -1,65 +1,84 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autotable from 'jspdf-autotable';
+import wfLogo from '../../public/wf-180.png'
 
-export const genHeader = (doc, pageWidth, title, name, descr, wfLogo, acctName) => {
-  // set document text font
-  const pageCenter = pageWidth - 20;
-  jsPDF.doc.setFont('times');
+export const genHeader = (orientation, acctName, title, name, descr) => {
+  // Initialize jsPDF with the given orientation 
+  const doc = new jsPDF({
+    orientation: orientation,
+    unit: 'pt',
+  });
+  doc.setProperties({ margin: 20 });
+  doc.text("", 0, 0);
+
+  // Set document Font
+  doc.setFont('times');
+
+  // Get Report Name element widths
+  var startY = 5;
+  var pageWidth = doc.internal.pageSize.getWidth() - 50;
+  console.log('page width: ', pageWidth);
+  const pageCenter = pageWidth / 2;
+  const acctNameWidth = doc.getTextWidth(acctName);
+  const titleWidth = doc.getTextWidth(title);
+  const nameWidth = doc.getTextWidth(name);
+  const titleNameWidth = titleWidth + nameWidth; // Title and Name
+  const descrWidth = doc.getTextWidth(descr);
 
   // Set Header Box
   doc.setLineWidth(0.5);
   doc.setFillColor('#dcfce7');
   doc.setDrawColor('black');
-  // roundedRect (x, y, pageWidth, height, rx, ry, 'FD')
-  doc.roundedRect(10, 5, pageCenter, 40, 3, 3, 'FD');
+  doc.roundedRect(10, startY, pageWidth, 80, 3, 3, 'FD');
 
-  // WF Logo (Image, 'JPEG', x, y, width, height)
-  doc.addImage(wfLogo, 'JPEG', 12, 7, 15, 15);
-  
+  // WF Logo (Image, 'PNG', x, y, width, height)
+  doc.addImage(wfLogo, 'JPEG', 15, startY + 4, 30, 30);
+
   // Account Name
+  startY += 15;
   doc.setFontSize(16);
   doc.setFont(undefined, 'bold');
   doc.setTextColor('red');
-  doc.text(acctName, 105, 13, null, null, 'center');
+  doc.text(acctName, pageCenter, startY, null, null, 'center'); // Centered horizontally
 
   // Report Date
   const date = "Date: " + new Date().toISOString().split('T')[0];
   doc.setFontSize(12);
   doc.setFont(undefined, 'normal');
   doc.setTextColor('black');
-  doc.text(date, pageCenter, 13, null, null, 'right');
+  doc.text(date, pageWidth, startY, null, null, 'right');
 
-  // Report Name and Info
-  doc.setFontSize(14);
-  doc.setTextColor("black");
-  // Set title, name, and date on the same line
+  // Set title and name on the same line
+  startY += 20;
+  let startX = (pageCenter - (titleNameWidth / 2)); // Center the text
   doc.setFontSize(14);
   doc.setTextColor("black");
   doc.setFont("times", "normal");
-  // Get Report Name element widths    
-  const titleWidth = doc.getTextWidth(title);
-  const nameWidth = doc.getTextWidth(name);
-  const totalWidth = titleWidth + nameWidth;
-  // Format Report Name and info
-  let startX = (pageCenter - totalWidth) / 2; // Center the text
-  doc.text(title, startX, 20);
+  doc.text(title, startX, startY);
   doc.setFont("times", "bold");
-  doc.text(name, startX + titleWidth, 20);
+  doc.text(name, startX + titleWidth, startY);
+
   // Format Description
+  startY += 20;
   doc.setFontSize(12);
   doc.setFont("times", 'italic');
   doc.setTextColor("blue");
-  doc.text(descr, startX + descrWidth, 28, 
-      { maxWidth: 135, align: "center" },"center");
+  doc.text(descr, pageCenter, startY, { maxWidth: pageWidth - 20, align: "center" }, "center"); // Centered horizontally
 
   return doc;
-};
+}
+;
 
-export const pdfTable = (doc, tblHead, tblData, columnStyles, startY = 46) => {
-  jspdf_autotable(doc, {
+export const genTable = (doc, tblData, columnStyles, startY) => {
+  console.log('Inside function BEFORE genTable:', JSON.stringify(doc, null, 2).slice(0, 500));
+
+  const tblHead = Object.keys(tblData[0] || {}).map(key => key.trim());
+  const tblBody = tblData.map(item => Object.values(item));
+
+  autotable(doc, {
     columnStyles,
-    head: [tblHead],
-    body: tblData,
+    head: [tblHead], // Ensure headers are passed as an array of arrays
+    body: tblBody,
     startY,
     headStyles: {
       lineWidth: 0.3,
@@ -67,13 +86,16 @@ export const pdfTable = (doc, tblHead, tblData, columnStyles, startY = 46) => {
       fillColor: 'lightblue',
       textColor: 'blue',
       fontSize: 12,
-      font: 'times'
+      font: 'times',
+      cellPadding: 2,
+      halign: 'center', // Center align the header text
+      valign: 'middle'  // Vertically align the header text to the middle
     },
     bodyStyles: {
       lineWidth: 0.3,
       lineColor: 'black',
       minCellHeight: 0.5,
-      cellPadding: 1.1,
+      cellPadding: 2, // Ensure consistent padding
       textColor: 'black',
       fontSize: 11,
       font: 'times'
@@ -84,6 +106,20 @@ export const pdfTable = (doc, tblHead, tblData, columnStyles, startY = 46) => {
       }
     }
   });
+
+  console.log('Inside function AFTER genTable:', JSON.stringify(doc, null, 2).slice(0, 500));
   return doc;
 };
+;
+
+// calculate resizeWidth
+// function calculateResizeWidth(contentWidth, pageWidth) {
+  // Logic to calculate resizeWidth based on content width and page width
+  // This is just a placeholder. You need to implement the actual logic.
+//  return pageWidth / contentWidth;
+// }
+// ;
+
+const pdfBundle = { genHeader, genTable };
+export default pdfBundle;
 

@@ -1,10 +1,10 @@
-// tests/data/sampleData.js
+// tests/data/header.js
 module.exports = {
-  tbl_Entity: {
-    selectedRow: {
-      name: "Produce",
-      description: "Fresh Produce",
+  hdrData: {
+      acctName: 'Test Account Name',
+      title: 'Ingredient Type: ',
+      name: "Fruit",
+      description: "Fresh Fruit",
       "id": 3
-    }
   }
 };

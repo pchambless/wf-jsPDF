@@ -1,4 +1,4 @@
-import { c as commonjsGlobal, _ as _typeof$1 } from './index-6cbdf86a.js';
+import { c as commonjsGlobal, _ as _typeof$1 } from './index-705def8c.esm.js';
 
 var check = function (it) {
   return it && it.Math === Math && it;
