@@ -1,4 +1,4 @@
-import { genHeader, genTable } from '../dist/index.esm.js'; // Import named exports
+import { genHeader, genTable } from '../dist/index.umd.js';
 import fs from 'fs'; // Import file system module
 import { hdrData } from './data/header.js'; 
 import { tblData } from './data/table.js';

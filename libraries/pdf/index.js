@@ -8,6 +8,7 @@ export const genHeader = (orientation, acctName, title, name, descr) => {
     orientation: orientation,
     unit: 'pt',
   });
+  const leftMargin = 20; // Set a consistent left margin
   doc.setProperties({ margin: 20 });
   doc.text("", 0, 0);
 
@@ -17,7 +18,6 @@ export const genHeader = (orientation, acctName, title, name, descr) => {
   // Get Report Name element widths
   var startY = 5;
   var pageWidth = doc.internal.pageSize.getWidth() - 50;
-  console.log('page width: ', pageWidth);
   const pageCenter = pageWidth / 2;
   const acctNameWidth = doc.getTextWidth(acctName);
   const titleWidth = doc.getTextWidth(title);
@@ -29,10 +29,10 @@ export const genHeader = (orientation, acctName, title, name, descr) => {
   doc.setLineWidth(0.5);
   doc.setFillColor('#dcfce7');
   doc.setDrawColor('black');
-  doc.roundedRect(10, startY, pageWidth, 80, 3, 3, 'FD');
+  doc.roundedRect(leftMargin - 10, startY, pageWidth, 80, 3, 3, 'FD');
 
   // WF Logo (Image, 'PNG', x, y, width, height)
-  doc.addImage(wfLogo, 'JPEG', 15, startY + 4, 30, 30);
+  doc.addImage(wfLogo, 'JPEG', leftMargin - 5, startY + 4, 30, 30);
 
   // Account Name
   startY += 15;
@@ -70,8 +70,7 @@ export const genHeader = (orientation, acctName, title, name, descr) => {
 ;
 
 export const genTable = (doc, tblData, columnStyles, startY) => {
-  console.log('Inside function BEFORE genTable:', JSON.stringify(doc, null, 2).slice(0, 500));
-
+  const leftMargin = 20;
   const tblHead = Object.keys(tblData[0] || {}).map(key => key.trim());
   const tblBody = tblData.map(item => Object.values(item));
 
@@ -80,6 +79,7 @@ export const genTable = (doc, tblData, columnStyles, startY) => {
     head: [tblHead], // Ensure headers are passed as an array of arrays
     body: tblBody,
     startY,
+    margin: { left: leftMargin }, // Apply the left margin
     headStyles: {
       lineWidth: 0.3,
       lineColor: 'black',
