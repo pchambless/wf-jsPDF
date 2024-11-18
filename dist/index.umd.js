@@ -3708,7 +3708,6 @@
     // Get Report Name element widths
     var startY = 5;
     var pageWidth = doc.internal.pageSize.getWidth() - 50;
-    console.log('page width: ', pageWidth);
     const pageCenter = pageWidth / 2;
     doc.getTextWidth(acctName);
     const titleWidth = doc.getTextWidth(title);
@@ -3720,10 +3719,10 @@
     doc.setLineWidth(0.5);
     doc.setFillColor('#dcfce7');
     doc.setDrawColor('black');
-    doc.roundedRect(leftMargin - 10, startY, pageWidth, 80, 3, 3, 'FD');
+    doc.roundedRect(leftMargin, startY, pageWidth, 80, 3, 3, 'FD');
 
     // WF Logo (Image, 'PNG', x, y, width, height)
-    doc.addImage(img, 'JPEG', leftMargin - 5, startY + 4, 30, 30);
+    doc.addImage(img, 'JPEG', leftMargin + 5, startY + 4, 30, 30);
 
     // Account Name
     startY += 15;
@@ -3798,17 +3797,9 @@
       }
     });
 
-    console.log('Inside function AFTER genTable:', JSON.stringify(doc, null, 2).slice(0, 500));
+  // console.log('Inside function AFTER genTable:', JSON.stringify(doc, null, 2).slice(0, 500));
     return doc;
   };
-
-  // calculate resizeWidth
-  // function calculateResizeWidth(contentWidth, pageWidth) {
-    // Logic to calculate resizeWidth based on content width and page width
-    // This is just a placeholder. You need to implement the actual logic.
-  //  return pageWidth / contentWidth;
-  // }
-  // ;
 
   const pdfBundle = { genHeader, genTable };
 

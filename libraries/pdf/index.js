@@ -29,10 +29,10 @@ export const genHeader = (orientation, acctName, title, name, descr) => {
   doc.setLineWidth(0.5);
   doc.setFillColor('#dcfce7');
   doc.setDrawColor('black');
-  doc.roundedRect(leftMargin - 10, startY, pageWidth, 80, 3, 3, 'FD');
+  doc.roundedRect(leftMargin, startY, pageWidth, 80, 3, 3, 'FD');
 
   // WF Logo (Image, 'PNG', x, y, width, height)
-  doc.addImage(wfLogo, 'JPEG', leftMargin - 5, startY + 4, 30, 30);
+  doc.addImage(wfLogo, 'JPEG', leftMargin + 5, startY + 4, 30, 30);
 
   // Account Name
   startY += 15;
@@ -107,18 +107,9 @@ export const genTable = (doc, tblData, columnStyles, startY) => {
     }
   });
 
-  console.log('Inside function AFTER genTable:', JSON.stringify(doc, null, 2).slice(0, 500));
+// console.log('Inside function AFTER genTable:', JSON.stringify(doc, null, 2).slice(0, 500));
   return doc;
 };
-;
-
-// calculate resizeWidth
-// function calculateResizeWidth(contentWidth, pageWidth) {
-  // Logic to calculate resizeWidth based on content width and page width
-  // This is just a placeholder. You need to implement the actual logic.
-//  return pageWidth / contentWidth;
-// }
-// ;
 
 const pdfBundle = { genHeader, genTable };
 export default pdfBundle;
