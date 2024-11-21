@@ -110,7 +110,7 @@ export const genTable = (doc, tblData, columnStyles, startY, styleCallback) => {
     }
   });
   console.log('genTable finalY:', finalY);
-  return { doc, finalY }; // Return the document and the final Y position
+  return { doc, finalY }; 
 };
 
 

@@ -3800,7 +3800,7 @@
       }
     });
     console.log('genTable finalY:', finalY);
-    return { doc, finalY }; // Return the document and the final Y position
+    return { doc, finalY }; 
   };
 
 
