@@ -4,7 +4,7 @@ import { hdrData } from './data/header.js';
 import { tblData } from './data/table.js';
 
 describe('buildPDF', () => {
-  it('should generate a PDF with the correct header', () => {
+  it('should generate a PDF with the correct header and validate finalY', () => {
 
     // Define the buildPDF function
     function buildPDF() {
@@ -28,24 +28,29 @@ describe('buildPDF', () => {
         7: { cellWidth: [25], halign: 'left' }
       };
 
-// Custom style callback to make cells bold based on criteria
-console.log('Before styleCallback.');
-const styleCallback = data => {
-  if (data.column.index === 0 && data.cell.text[0] === 'M') {
-    console.log('In styleCallback -> Row: ', data.row.index, 'Column: ', data.column.index, ' Text: ', data.cell.text[0]);
-    data.cell.styles.fontStyle = 'bold';
-    data.cell.styles.textColor = 'red'; // Ensure text color is red
-    data.cell.styles.fontSize = 14; // Ensure font size is appropriate
-    data.cell.styles.font = 'times'; // Ensure font family is consistent
-  }
-};
+      // Custom style callback to make cells bold based on criteria
+      console.log('Before styleCallback.');
+      const styleCallback = data => {
+        if (data.column.index === 0 && data.cell.text[0] === 'M') {
+          console.log('In styleCallback -> Row: ', data.row.index, 'Column: ', data.column.index, ' Text: ', data.cell.text[0]);
+          data.cell.styles.fontStyle = 'bold';
+          data.cell.styles.textColor = 'red'; // Ensure text color is red
+          data.cell.styles.fontSize = 14; // Ensure font size is appropriate
+          data.cell.styles.font = 'times'; // Ensure font family is consistent
+        }
+      };
 
+      // Create the table with the style callback and capture the final Y position
+      const result = genTable(doc, tblData, columnStyles, 91, styleCallback);
+      console.log('Final Y position after the table:', result.finalY); // Display finalY value
 
+      // Add the finalY value as a line in the PDF
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor('black');
+      doc.text(`finalY = ${result.finalY}`, 20, result.finalY + 30);
 
-      // Create the table with the style callback
-      doc = genTable(doc, tblData, columnStyles, 91, styleCallback);
-
-      return doc.output('dataurlstring');
+      return result.doc.output('dataurlstring');
     }
 
     // Run the test
@@ -56,7 +61,7 @@ const styleCallback = data => {
     const pdfBuffer = Buffer.from(pdfData, 'base64');
     fs.writeFileSync('C:/Users/pc790/OneDrive/Consulting/Whatsfresh/aaTestPDF.pdf', pdfBuffer);
 
-    // Add assertions to verify the output
+    // Add assertions to verify the output and finalY
     expect(pdfOutput.startsWith("data:application/pdf;filename=generated.pdf;base64")).toBe(true);
   });
 });

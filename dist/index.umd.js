@@ -3762,6 +3762,8 @@
     const tblHead = Object.keys(tblData[0] || {}).map(key => key.trim());
     const tblBody = tblData.map(item => Object.values(item));
 
+    let finalY = startY;
+
     autotable(doc, {
       columnStyles,
       head: [tblHead], // Ensure headers are passed as an array of arrays
@@ -3788,15 +3790,19 @@
         fontSize: 11,
         font: 'times'
       },
+      didDrawCell: function (data) {
+        finalY = data.cursor.y; // Update finalY with the current y position after drawing each cell
+      },
       didParseCell: function (data) {
         if (styleCallback) {
           styleCallback(data);
         }
       }
     });
-
-    return doc;
+    console.log('genTable finalY:', finalY);
+    return { doc, finalY }; // Return the document and the final Y position
   };
+
 
 
   const pdfBundle = { genHeader, genTable };
