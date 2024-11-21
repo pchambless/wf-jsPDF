@@ -19,11 +19,9 @@ export const genHeader = (orientation, acctName, title, name, descr) => {
   var startY = 5;
   var pageWidth = doc.internal.pageSize.getWidth() - 50;
   const pageCenter = pageWidth / 2;
-  const acctNameWidth = doc.getTextWidth(acctName);
   const titleWidth = doc.getTextWidth(title);
   const nameWidth = doc.getTextWidth(name);
-  const titleNameWidth = titleWidth + nameWidth; // Title and Name
-  const descrWidth = doc.getTextWidth(descr);
+  const titleNameWidth = titleWidth + nameWidth; 
 
   // Set Header Box
   doc.setLineWidth(0.5);
@@ -69,7 +67,7 @@ export const genHeader = (orientation, acctName, title, name, descr) => {
 }
 ;
 
-export const genTable = (doc, tblData, columnStyles, startY) => {
+export const genTable = (doc, tblData, columnStyles, startY, styleCallback) => {
   const leftMargin = 20;
   const tblHead = Object.keys(tblData[0] || {}).map(key => key.trim());
   const tblBody = tblData.map(item => Object.values(item));
@@ -101,15 +99,15 @@ export const genTable = (doc, tblData, columnStyles, startY) => {
       font: 'times'
     },
     didParseCell: function (data) {
-      if (data.section === 'head') {
-        data.cell.styles.halign = 'center';
+      if (styleCallback) {
+        styleCallback(data);
       }
     }
   });
 
-// console.log('Inside function AFTER genTable:', JSON.stringify(doc, null, 2).slice(0, 500));
   return doc;
 };
+
 
 const pdfBundle = { genHeader, genTable };
 export default pdfBundle;

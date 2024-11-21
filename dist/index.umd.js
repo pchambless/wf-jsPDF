@@ -3709,11 +3709,9 @@
     var startY = 5;
     var pageWidth = doc.internal.pageSize.getWidth() - 50;
     const pageCenter = pageWidth / 2;
-    doc.getTextWidth(acctName);
     const titleWidth = doc.getTextWidth(title);
     const nameWidth = doc.getTextWidth(name);
-    const titleNameWidth = titleWidth + nameWidth; // Title and Name
-    doc.getTextWidth(descr);
+    const titleNameWidth = titleWidth + nameWidth; 
 
     // Set Header Box
     doc.setLineWidth(0.5);
@@ -3759,7 +3757,7 @@
   }
 ;
 
-  const genTable = (doc, tblData, columnStyles, startY) => {
+  const genTable = (doc, tblData, columnStyles, startY, styleCallback) => {
     const leftMargin = 20;
     const tblHead = Object.keys(tblData[0] || {}).map(key => key.trim());
     const tblBody = tblData.map(item => Object.values(item));
@@ -3791,15 +3789,15 @@
         font: 'times'
       },
       didParseCell: function (data) {
-        if (data.section === 'head') {
-          data.cell.styles.halign = 'center';
+        if (styleCallback) {
+          styleCallback(data);
         }
       }
     });
 
-  // console.log('Inside function AFTER genTable:', JSON.stringify(doc, null, 2).slice(0, 500));
     return doc;
   };
+
 
   const pdfBundle = { genHeader, genTable };
 
