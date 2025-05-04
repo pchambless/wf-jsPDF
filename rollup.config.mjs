@@ -2,8 +2,9 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import image from '@rollup/plugin-image';
+
 export default {
-input: 'libraries/pdf/index.js', 
+input: 'libraries/pdfBundle/index.js', 
 output: {
 	file: 'dist/index.umd.js', // Single output file
 	format: 'umd', // UMD format

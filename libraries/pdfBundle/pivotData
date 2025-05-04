@@ -1,0 +1,10 @@
+export const pivotData = (item, selectedColumns, columnRenames) => {
+  const result = [];
+  for (const [key, value] of Object.entries(item)) {
+    if (selectedColumns.includes(key)) {
+      const newKey = columnRenames[key] || key;
+      result.push({ Property: newKey, Value: value });
+    }
+  }
+  return result;
+}

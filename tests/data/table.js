@@ -23,7 +23,7 @@ module.exports = {
     },
     {
       "Code": "SB",
-      "Ingredient": "Strawberry",
+      "Ingredient": "Strawberry and Rasberries all together in a jar. And maybe we add a bit more text to expand the cell even more.",
       "gms/Oz": 18,
       "Units": "Pound",
       "Vendor": "-",
